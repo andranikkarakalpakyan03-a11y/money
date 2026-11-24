@@ -17,27 +17,32 @@ class CategoryFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 55,
-      child: ListView(
+      child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        children: [
-          ChoiceChip(
-            label: const Text('Բոլորը'),
-            selected: selectedCategory == null,
-            onSelected: (_) => onSelected(null),
-          ),
-          const SizedBox(width: 8),
-
-          ...categories.map((category) {
+        itemCount: categories.length + 1,
+        itemBuilder: (context, index) {
+          if (index == 0) {
             return Padding(
               padding: const EdgeInsets.only(right: 8),
               child: ChoiceChip(
-                label: Text('${category.emoji} ${category.title}'),
-                selected: selectedCategory == category,
-                onSelected: (_) => onSelected(category),
+                label: const Text('Բոլորը'),
+                selected: selectedCategory == null,
+                onSelected: (_) => onSelected(null),
               ),
             );
-          }),
-        ],
+          }
+
+          final category = categories[index - 1];
+
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: ChoiceChip(
+              label: Text('${category.emoji} ${category.title}'),
+              selected: selectedCategory == category,
+              onSelected: (_) => onSelected(category),
+            ),
+          );
+        },
       ),
     );
   }
